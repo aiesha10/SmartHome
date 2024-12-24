@@ -1,10 +1,8 @@
-
-// Class for Thermostat, extending Device
 class Thermostat extends Device {
     private int temperature;
 
     public Thermostat(String name, int temperature) {
-        super(name, false); // Default is off
+        super(name, false);
         this.temperature = temperature;
     }
 

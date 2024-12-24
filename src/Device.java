@@ -1,4 +1,4 @@
-// Abstract class representing a generic device
+
 abstract class Device {
     private String name;
     private boolean isOn;
@@ -26,5 +26,5 @@ abstract class Device {
         System.out.println(name + " is turned off.");
     }
 
-    public abstract void displayStatus(); // Abstract method for status display
+    public abstract void displayStatus();
 }
