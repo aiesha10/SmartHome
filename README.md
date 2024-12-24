@@ -17,3 +17,7 @@ The Smart Home Management System is a simulation project where users can interac
 ## Future Enhancements
 - Add more devices such as cameras and security systems.
 - Include energy consumption tracking.
+
+<p><strong>Current Status:</strong> Basic skeleton and GUI done</p>
+</body>
+</html>
