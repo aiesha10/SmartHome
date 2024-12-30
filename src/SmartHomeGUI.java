@@ -31,8 +31,8 @@ public class SmartHomeGUI {
                 Graphics2D g2d = (Graphics2D) g;
                 int width = getWidth();
                 int height = getHeight();
-                Color color1 = new Color(255, 228, 196);
-                Color color2 = new Color(255, 222, 173);
+                Color color1 = new Color(196, 255, 234);
+                Color color2 = new Color(209, 174, 123);
                 GradientPaint gp = new GradientPaint(0, 0, color1, width, height, color2);
                 g2d.setPaint(gp);
                 g2d.fillRect(0, 0, width, height);
@@ -65,7 +65,6 @@ public class SmartHomeGUI {
         JPanel thermostatPanel = createThermostatPanel(headerFont, labelFont, thermostat, frame);
         JPanel fanPanel = createFanPanel(headerFont, labelFont, fan, frame);
 
-
         CardLayout cardLayout = (CardLayout) frame.getContentPane().getLayout();
         frame.add(homePanel, "Home");
         frame.add(lightPanel, "Lights");
@@ -86,9 +85,27 @@ public class SmartHomeGUI {
         JButton button = new JButton(name);
         button.setFont(font);
         button.setPreferredSize(new Dimension(200, 150));
-        button.setBackground(new Color(135, 206, 250));
+        //button.setBackground(Color.LIGHT_GRAY);
+        button.setBackground(new Color(151, 90, 184));
         button.setForeground(Color.BLACK);
         button.setFocusPainted(false);
+
+        // this parts adds the hover effect for scaling, when one places their cursor on button their size changes
+        button.addMouseListener(new java.awt.event.MouseAdapter() {
+            @Override
+            public void mouseEntered(java.awt.event.MouseEvent e) {
+                button.setPreferredSize(new Dimension(220, 170)); // Grow slightly
+                button.revalidate(); // Re-layout the button to apply the new size
+            }
+
+            @Override
+            public void mouseExited(java.awt.event.MouseEvent e) {
+                button.setPreferredSize(new Dimension(200, 150)); // Back to original size
+                button.revalidate(); // Re-layout the button to revert the size
+            }
+        });
+
+
         return button;
     }
 
@@ -100,8 +117,9 @@ public class SmartHomeGUI {
                 Graphics2D g2d = (Graphics2D) g;
                 int width = getWidth();
                 int height = getHeight();
-                Color color1 = new Color(240, 248, 255);
-                Color color2 = new Color(230, 230, 250);
+                //color options for light panel
+                Color color1 = new Color(126, 142, 82);
+                Color color2 = new Color(102, 149, 189);
                 GradientPaint gp = new GradientPaint(0, 0, color1, 0, height, color2);
                 g2d.setPaint(gp);
                 g2d.fillRect(0, 0, width, height);
@@ -146,8 +164,8 @@ public class SmartHomeGUI {
                 Graphics2D g2d = (Graphics2D) g;
                 int width = getWidth();
                 int height = getHeight();
-                Color color1 = new Color(240, 248, 255);
-                Color color2 = new Color(230, 230, 250);
+                Color color1 = new Color(227, 173, 68, 195);
+                Color color2 = new Color(195, 195, 202);
                 GradientPaint gp = new GradientPaint(0, 0, color1, 0, height, color2);
                 g2d.setPaint(gp);
                 g2d.fillRect(0, 0, width, height);
@@ -196,8 +214,8 @@ public class SmartHomeGUI {
                 Graphics2D g2d = (Graphics2D) g;
                 int width = getWidth();
                 int height = getHeight();
-                Color color1 = new Color(240, 248, 255);
-                Color color2 = new Color(230, 230, 250);
+                Color color1 = new Color(102, 149, 189);
+                Color color2 = new Color(181, 132, 209);
                 GradientPaint gp = new GradientPaint(0, 0, color1, 0, height, color2);
                 g2d.setPaint(gp);
                 g2d.fillRect(0, 0, width, height);
