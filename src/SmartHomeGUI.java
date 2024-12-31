@@ -5,6 +5,11 @@ import java.awt.*;
 import java.awt.event.ActionEvent;
 
 public class SmartHomeGUI {
+
+    // Class-level variable for CardLayout
+    private static CardLayout cardLayout;
+
+
     public static void main(String[] args) {
 
         SmartHomeSystem smartHomeSystem = new SmartHomeSystem();
@@ -19,7 +24,11 @@ public class SmartHomeGUI {
         JFrame frame = new JFrame("Smart Home System");
         frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
         frame.setSize(1000, 700);
-        frame.setLayout(new CardLayout());
+
+        //initializing card layout
+        cardLayout = new CardLayout();
+        frame.setLayout(cardLayout);
+
 
         Font headerFont = new Font("Arial", Font.BOLD, 24);
         Font labelFont = new Font("Arial", Font.PLAIN, 18);
@@ -43,9 +52,49 @@ public class SmartHomeGUI {
         GridBagConstraints gbc = new GridBagConstraints();
         gbc.insets = new Insets(10, 10, 10, 10);
 
-        JButton lightButton = createDeviceButton("Lights", headerFont);
-        JButton thermostatButton = createDeviceButton("Thermostat", headerFont);
-        JButton fanButton = createDeviceButton("Fan", headerFont);
+        // Load the bulb icon
+        ImageIcon bulbIcon = new ImageIcon("src/bulb.png");
+
+        // Resize the icon to make it bigger
+        Image img = bulbIcon.getImage();
+        Image resizedImg = img.getScaledInstance(120, 120, Image.SCALE_SMOOTH); // Adjust size as needed
+        bulbIcon = new ImageIcon(resizedImg); // Create a new ImageIcon with the resized image
+
+
+        //Bulb (Button+Icon)
+        JButton lightButton = new JButton();
+        lightButton.setPreferredSize(new Dimension(200, 150));
+        lightButton.setIcon(bulbIcon); // Add the icon
+        lightButton.setFocusPainted(false);
+        lightButton.setToolTipText("Lights"); // Add tooltip for accessibility
+        lightButton.addActionListener(e -> cardLayout.show(frame.getContentPane(), "Lights"));
+
+        // Thermostat(Button+Icon)
+        ImageIcon thermometerIcon = new ImageIcon("src/thermometer.png");
+        Image thermometerImg = thermometerIcon.getImage();
+        Image resizedThermometerImg = thermometerImg.getScaledInstance(120, 120, Image.SCALE_SMOOTH);
+        thermometerIcon = new ImageIcon(resizedThermometerImg);
+
+        JButton thermostatButton = new JButton();
+        thermostatButton.setPreferredSize(new Dimension(200, 150));
+        thermostatButton.setIcon(thermometerIcon);
+        thermostatButton.setFocusPainted(false);
+        thermostatButton.setToolTipText("Thermostat");
+        thermostatButton.addActionListener(e -> cardLayout.show(frame.getContentPane(), "Thermostat"));
+
+        //Fan (Button+Icon)
+        ImageIcon fanIcon = new ImageIcon("src/fan.png");
+        Image fanImg = fanIcon.getImage();
+        Image resizedFanImg = fanImg.getScaledInstance(120, 120, Image.SCALE_SMOOTH);
+        fanIcon = new ImageIcon(resizedFanImg);
+
+        JButton fanButton = new JButton();
+        fanButton.setPreferredSize(new Dimension(200, 150));
+        fanButton.setIcon(fanIcon);
+        fanButton.setFocusPainted(false);
+        fanButton.setToolTipText("Fan");
+        fanButton.addActionListener(e -> cardLayout.show(frame.getContentPane(), "Fan"));
+
 
         gbc.gridx = 0;
         gbc.gridy = 0;
@@ -153,6 +202,16 @@ public class SmartHomeGUI {
         panel.add(label, BorderLayout.CENTER);
         panel.add(toggleButton, BorderLayout.SOUTH);
         panel.add(backButton, BorderLayout.NORTH);
+
+        // Add custom layout for lights
+        if (device instanceof Light) {
+            ImageIcon bulbIcon = new ImageIcon("bulb.png"); // Ensure bulb.png is in the source folder
+            JLabel iconLabel = new JLabel(bulbIcon);       // Create a JLabel for the icon
+            iconLabel.setHorizontalAlignment(SwingConstants.CENTER);
+            panel.add(iconLabel, BorderLayout.EAST);       // Add the icon to the right-middle part
+        }
+
+
         return panel;
     }
 
@@ -165,7 +224,7 @@ public class SmartHomeGUI {
                 int width = getWidth();
                 int height = getHeight();
                 Color color1 = new Color(227, 173, 68, 195);
-                Color color2 = new Color(195, 195, 202);
+                Color color2 = new Color(28, 28, 159);
                 GradientPaint gp = new GradientPaint(0, 0, color1, 0, height, color2);
                 g2d.setPaint(gp);
                 g2d.fillRect(0, 0, width, height);
