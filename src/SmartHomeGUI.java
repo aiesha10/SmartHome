@@ -12,6 +12,8 @@ public class SmartHomeGUI {
         Thermostat thermostat = new Thermostat("Living Room Thermostat", 22);
         Fan fan = new Fan("Ceiling Fan", false);
         Camera camera = new Camera("Security Camera", false);
+        SmartLock smartLock = new SmartLock("Front Door SmartLock", true, "1234");
+
 
         smartHomeSystem.addDevice(light);
         smartHomeSystem.addDevice(thermostat);
@@ -71,17 +73,39 @@ public class SmartHomeGUI {
         gbc.gridy = 1;
         homePanel.add(cameraButton, gbc);
 
+        //SmartLock button
+        JButton smartLockButton = createDeviceButton("SmartLock", "src/smartlock.png", frame, "SmartLock");
+        gbc.gridx = 3; // Adjust grid position as needed
+        gbc.gridy = 0;
+        homePanel.add(smartLockButton, gbc);
+
         // Add Panels to CardLayout
         JPanel lightPanel = createDevicePanel("Light Control", headerFont, labelFont, light, frame);
         JPanel thermostatPanel = createThermostatPanel(headerFont, labelFont, thermostat, frame);
         JPanel fanPanel = createFanPanel(headerFont, labelFont, fan, frame);
+        //old one JPanel cameraPanel = createCameraPanel(headerFont, labelFont, camera, frame);
+//new camera addinglocations as well
         JPanel cameraPanel = createCameraPanel(headerFont, labelFont, camera, frame);
+        JPanel cameraLocationsPanel = createCameraLocationsPanel(headerFont, labelFont, camera, frame);
+        JPanel garageCameraPanel = createGarageCameraPanel(headerFont, labelFont, camera, frame);
+        JPanel livingRoomCameraPanel = createGarageCameraPanel(headerFont, labelFont, camera, frame);
+        JPanel frontDoorCameraPanel = createGarageCameraPanel(headerFont, labelFont, camera, frame);
+
+        //smartlock panel
+        // SmartLock smartLock = new SmartLock("Front Door SmartLock", true, "1234"); // Example PIN: 1234
+        JPanel smartLockPanel = createSmartLockPanel(headerFont, labelFont, smartLock, frame);
+        frame.add(smartLockPanel, "SmartLock");
 
         frame.add(homePanel, "Home");
         frame.add(lightPanel, "Lights");
         frame.add(thermostatPanel, "Thermostat");
         frame.add(fanPanel, "Fan");
         frame.add(cameraPanel, "Camera");
+        //new for locations
+        frame.add(cameraLocationsPanel, "CameraLocations");
+        frame.add(garageCameraPanel, "GarageCamera");
+        frame.add(livingRoomCameraPanel, "LivingRoomCamera");
+        frame.add(frontDoorCameraPanel, "FrontDoorCamera");
 
         cardLayout.show(frame.getContentPane(), "Home");
         frame.setVisible(true);
@@ -191,11 +215,22 @@ public class SmartHomeGUI {
 
     private static JPanel createCameraPanel(Font headerFont, Font labelFont, Camera camera, JFrame frame) {
         JPanel panel = new JPanel(new BorderLayout());
-        JLabel label = new JLabel(camera.getName() + " is " + (camera.isOn() ? "On" : "Off") +
-                ", Recording: " + (camera.isRecording() ? "On" : "Off"), SwingConstants.CENTER);
+        //old JLabel label = new JLabel(camera.getName() + " is " + (camera.isOn() ? "On" : "Off") +
+              //again  ", Recording: " + (camera.isRecording() ? "On" : "Off"), SwingConstants.CENTER);
+        JLabel label = new JLabel("Click on the Camera to manage locations:", SwingConstants.CENTER);
         label.setFont(headerFont);
 
-        JButton toggleButton = new JButton(camera.isOn() ? "Turn Off" : "Turn On");
+        JButton cameraIconButton = new JButton();
+        cameraIconButton.setPreferredSize(new Dimension(200, 150));
+        ImageIcon cameraIcon = new ImageIcon("src/camera.png"); // Adjust path to your icon
+        Image scaledImage = cameraIcon.getImage().getScaledInstance(120, 120, Image.SCALE_SMOOTH);
+        cameraIconButton.setIcon(new ImageIcon(scaledImage));
+
+        cameraIconButton.setFocusPainted(false);
+        cameraIconButton.setToolTipText("Click to manage Camera locations");
+
+        //old code no need of it anymore
+        /*JButton toggleButton = new JButton(camera.isOn() ? "Turn Off" : "Turn On");
         toggleButton.setFont(labelFont);
         toggleButton.addActionListener(e -> {
             if (camera.isOn()) {
@@ -239,5 +274,169 @@ public class SmartHomeGUI {
         panel.add(buttonsPanel, BorderLayout.SOUTH);
         panel.add(backButton, BorderLayout.NORTH);
         return panel;
+    }*/
+        cameraIconButton.addActionListener(e -> cardLayout.show(frame.getContentPane(), "CameraLocations"));
+
+        JButton backButton = new JButton("Go Back");
+        backButton.setFont(labelFont);
+        backButton.addActionListener(e -> cardLayout.show(frame.getContentPane(), "Home"));
+
+        panel.add(label, BorderLayout.NORTH);
+        panel.add(cameraIconButton, BorderLayout.CENTER);
+        panel.add(backButton, BorderLayout.SOUTH);
+
+        return panel;
+    }
+    private static JPanel createCameraLocationsPanel(Font headerFont, Font labelFont, Camera camera, JFrame frame) {
+        JPanel panel = new JPanel(new BorderLayout());
+        JLabel label = new JLabel("Select a location to control the camera:", SwingConstants.CENTER);
+        label.setFont(headerFont);
+
+        // Panel for location buttons
+        JPanel locationButtonsPanel = new JPanel(new GridLayout(1, 3, 10, 10));
+
+        // Create buttons for each location
+        JButton garageButton = new JButton("Garage");
+        JButton livingRoomButton = new JButton("Living Room");
+        JButton frontDoorButton = new JButton("Front Door");
+
+        garageButton.setFont(labelFont);
+        livingRoomButton.setFont(labelFont);
+        frontDoorButton.setFont(labelFont);
+
+        // Add actions for location buttons
+        garageButton.addActionListener(e -> cardLayout.show(frame.getContentPane(), "GarageCamera"));
+        livingRoomButton.addActionListener(e -> cardLayout.show(frame.getContentPane(), "LivingRoomCamera"));
+        frontDoorButton.addActionListener(e -> cardLayout.show(frame.getContentPane(), "FrontDoorCamera"));
+
+        locationButtonsPanel.add(garageButton);
+        locationButtonsPanel.add(livingRoomButton);
+        locationButtonsPanel.add(frontDoorButton);
+
+        JButton backButton = new JButton("Go Back");
+        backButton.setFont(labelFont);
+        backButton.addActionListener(e -> cardLayout.show(frame.getContentPane(), "Camera"));
+
+        panel.add(label, BorderLayout.NORTH);
+        panel.add(locationButtonsPanel, BorderLayout.CENTER);
+        panel.add(backButton, BorderLayout.SOUTH);
+
+        return panel;
+    }
+
+    private static JPanel createGarageCameraPanel(Font headerFont, Font labelFont, Camera camera, JFrame frame) {
+        JPanel panel = new JPanel(new BorderLayout());
+        JLabel statusLabel = new JLabel("Garage Camera: " + getCameraStatus(camera), SwingConstants.CENTER);
+        statusLabel.setFont(headerFont);
+
+        JButton toggleButton = new JButton("Turn On/Off");
+        toggleButton.setFont(labelFont);
+        toggleButton.addActionListener(e -> {
+            if (camera.isOn()) {
+                camera.turnOff();
+            } else {
+                camera.turnOn();
+            }
+            statusLabel.setText("Garage Camera: " + getCameraStatus(camera));
+        });
+
+        JButton recordButton = new JButton("Start/Stop Recording");
+        recordButton.setFont(labelFont);
+        recordButton.addActionListener(e -> {
+            if (camera.isOn()) {
+                camera.toggleRecording();
+            } else {
+                JOptionPane.showMessageDialog(frame, "Turn on the camera first!", "Error", JOptionPane.ERROR_MESSAGE);
+            }
+            statusLabel.setText("Garage Camera: " + getCameraStatus(camera));
+        });
+
+        JButton backButton = new JButton("Go Back");
+        backButton.setFont(labelFont);
+        backButton.addActionListener(e -> cardLayout.show(frame.getContentPane(), "CameraLocations"));
+
+        JPanel buttonsPanel = new JPanel(new GridLayout(2, 1, 10, 10));
+        buttonsPanel.add(toggleButton);
+        buttonsPanel.add(recordButton);
+
+        panel.add(statusLabel, BorderLayout.NORTH);
+        panel.add(buttonsPanel, BorderLayout.CENTER);
+        panel.add(backButton, BorderLayout.SOUTH);
+
+        return panel;
+    }
+
+    private static String getCameraStatus(Camera camera) {
+        return (camera.isOn() ? "On" : "Off") + ", Recording: " + (camera.isRecording() ? "On" : "off");
+    }
+
+    //smartlock panel
+    private static JPanel createSmartLockPanel(Font headerFont, Font labelFont, SmartLock smartLock, JFrame frame) {
+        JPanel panel = new JPanel(new BorderLayout());
+        //new old JLabel statusLabel = new JLabel(smartLock.getName() + " is " + (smartLock.isOn() ? "On" : "Off") +
+        //new old", Locked: " + (smartLock.isLocked() ? "Yes" : "No"), SwingConstants.CENTER);
+        JLabel statusLabel = new JLabel(smartLock.getName() + "is Locked" , SwingConstants.CENTER);
+        statusLabel.setFont(headerFont);
+        statusLabel.setOpaque(true); //it helps in changing color used it for alarm
+        statusLabel.setBackground(Color.LIGHT_GRAY);
+
+        //smartlock icon
+        JLabel iconLabel = new JLabel();
+        ImageIcon smartLockIcon = new ImageIcon("src/smartlock.png");
+        Image scaledImage = smartLockIcon.getImage().getScaledInstance(120, 120, Image.SCALE_SMOOTH);
+        iconLabel.setIcon(new ImageIcon(scaledImage));
+        iconLabel.setHorizontalAlignment(SwingConstants.CENTER);
+
+
+//creating seperate lock and unlock button to make it look clean and pretty
+
+        //unlockbutton
+        JButton unlockButton = new JButton("UnLock");
+        unlockButton.setFont(labelFont);
+        unlockButton.addActionListener(e -> {
+            String inputPin = JOptionPane.showInputDialog(frame, "Enter Pin to Unlock: ");
+            if(inputPin == null){
+                return;
+            }
+            try{
+                smartLock.unlock(inputPin);
+                statusLabel.setText("Welcome Back <3");
+                statusLabel.setBackground(Color.GREEN);
+            }catch (InvalidPinException ex) {
+                statusLabel.setText("Incorrect PIN!!! Emergency Alarm Triggered. ");
+                statusLabel.setBackground(Color.RED);
+                EmergencyAlarm.trigger();
+            }
+        });
+
+        JButton lockButton = new JButton("Lock");
+        lockButton.setFont(labelFont);
+        lockButton.addActionListener(e -> {
+            smartLock.lock();
+            statusLabel.setText("SmartLock is Locked.");
+            statusLabel.setBackground(Color.LIGHT_GRAY);
+        });
+        JButton backButton = new JButton("Go Back" );
+        backButton.setFont(labelFont);
+        backButton.addActionListener(e ->
+                cardLayout.show(frame.getContentPane(), "Home"));
+
+        //Button Panel
+        JPanel buttonPanel = new JPanel(new GridLayout(1, 3, 10, 10));
+        buttonPanel.add(lockButton);
+        buttonPanel.add(unlockButton);
+        buttonPanel.add(backButton);
+
+        panel.add(statusLabel, BorderLayout.NORTH);
+        panel.add(buttonPanel, BorderLayout.CENTER);
+
+        return panel;
+    }
+
+
+    //emergency alarm method new
+    private static void trigger() {
+        JOptionPane.showMessageDialog(null, "Emergency Alarm Triggered!", "ALERT", JOptionPane.ERROR_MESSAGE);
+        System.out.println("EMERGENCY ALARM: Unauthorized access attempt detected!");
     }
 }
