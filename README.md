@@ -7,7 +7,6 @@ The Smart Home Management System is a simulation project where users can interac
 
 ## Features
 - Control and monitor devices like lights and thermostats.
-- Interactive command-line interface for user interaction.
 - Demonstrates modular design and OOP concepts.
 
 ## Technologies Used
